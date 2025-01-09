@@ -1,4 +1,10 @@
 h1 {
-    color: rgb(249, 5, 5);
+    color: rgb(245, 6, 38);
     text-align: center;
+  }
+
+.lorem{
+    font-family: verdana;
+    font-size: 20px;
+    color: rgb(6, 127, 241);
   }

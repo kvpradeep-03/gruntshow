@@ -1,0 +1,25 @@
+.container {
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background-color: wheat;
+}
+
+.subcontainer {
+    display: flex; /* Ensures the boxes are aligned inline */
+    justify-content: space-between; /* Adds equal space between boxes */
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.box {
+    width: 25%px;
+    padding: 20px;
+    margin-left: 12px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background-color: tomato;
+}

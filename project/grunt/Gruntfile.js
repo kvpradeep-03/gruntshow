@@ -12,36 +12,61 @@ module.exports = function(grunt){
 
     // Project configuration.
     grunt.initConfig({
+        
         concat: {
-        options: {
+        
+            options: {
             //Defines the string or character that will be inserted between concatenated files.
             separator: '\n', 
             //The source map contains a mapping reference that helps developer tools trace errors or debug the original files.    
             sourceMap: true,   
             //banner This option is used to add a string or a comment at the beginning of the output file.
             banner: "/*Processed by SNA labs on "+datetime+"*/\n" 
-        },
-        css: {
-            src: [
-                '../css/1.css',
-                 '../css/2.css',
-                 '../css/3.css'
-            ],
-            
-            dest: '../../htdocs/css/style.css',
+            },
         
-        },
+            css: {
+                src: [
+                    '../css/**/*.css',
+                ],
+
+                dest: '../../htdocs/css/style.css', 
+            },
+            
+            js: {
+                src: [
+                    //grunt is a root directory
+                    'bower_components/jquery/dist/jquery.js',
+                    '../js/**/*.js',
+                ],
+                    
+                dest: '../../htdocs/js/app.js' 
+            },
 
         },
     
     //till now concat is over, continue on wat
         watch: {
-            scripts: {
-              files: ['**/*.js'],
-              tasks: ['jshint'],
+            css: {
+            // `/**/` matches any subdirectories inside css.  `*.css` matches all `.css` files in the css directory and its subdirectories.
+              files: [
+                '../css/**/*.css',
+                
+            ],
+              tasks: ['concat:css'],
               options: {
                 spawn: false,
               },
+            },
+
+            js: {
+                files: [
+                '../js/**/*.js'       
+                
+                ],
+                tasks: ['concat:js'],
+                options: {
+                spawn: false,
+                },
             },
           },
     });
@@ -59,6 +84,9 @@ module.exports = function(grunt){
         console.log('Task 2 is running ...');
     })
 
+    // Load the plugin cssmin
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+
     // Load the plugin that provides the "concat" task.
     grunt.loadNpmTasks('grunt-contrib-concat');
 
@@ -66,5 +94,5 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
-    grunt.registerTask('default',['task1','task2'],'concat','watch');
+    grunt.registerTask('default',['task1','task2','concat','watch']);
 };

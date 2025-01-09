@@ -1,13 +1,47 @@
-/*Processed by SNA labs on Last Sync: 8/1/2025 @ 19:17:1*/
+/*Processed by SNA labs on Last Sync: 9/1/2025 @ 11:40:34*/
 body {
-    background-color: lightblue;
+    background-color: rgb(24, 23, 24);
   }
 h1 {
-    color: rgb(249, 5, 5);
+    color: rgb(245, 6, 38);
     text-align: center;
   }
-p {
-    font-family: verdana; 
+
+.lorem{
+    font-family: verdana;
     font-size: 20px;
+    color: rgb(6, 127, 241);
   }
+
+p {
+    font-family: verdana;
+    font-size: 20px;
+    color: greenyellow;
+  }
+.container {
+    width: 100%;
+    padding: 20px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background-color: wheat;
+}
+
+.subcontainer {
+    display: flex; /* Ensures the boxes are aligned inline */
+    justify-content: space-between; /* Adds equal space between boxes */
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.box {
+    width: 25%px;
+    padding: 20px;
+    margin-left: 12px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background-color: tomato;
+}
+
 /*# sourceMappingURL=style.css.map */
