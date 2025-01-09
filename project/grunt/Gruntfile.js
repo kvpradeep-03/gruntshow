@@ -1,3 +1,5 @@
+const { obfuscate } = require("javascript-obfuscator");
+
 // Gruntfile.js is a node module so it can access all the node modules
 module.exports = function(grunt){ 
 
@@ -29,7 +31,7 @@ module.exports = function(grunt){
                     '../css/**/*.css',
                 ],
 
-                dest: '../../htdocs/css/style.css', 
+                dest: 'dist/style.css', 
             },
             
             js: {
@@ -39,12 +41,72 @@ module.exports = function(grunt){
                     '../js/**/*.js',
                 ],
                     
-                dest: '../../htdocs/js/app.js' 
+                dest: 'dist/app.js' 
             },
 
         },
-    
-    //till now concat is over, continue on wat
+
+        //minify the css,so it will be faster on loading frontend
+        cssmin: {
+            options: {
+                mergeIntoShorthands: false,
+                roundingPrecision: -1
+            },
+            target: {
+                files: {
+                '../../htdocs/css/style.css': ['dist/style.css']    //destination : source
+                }
+            }
+            },
+
+        //minify the js,so it will be faster on loading frontend
+        uglify: {
+            minify: {
+                files: {
+                '../../htdocs/js/app.min.js': ['dist/app.js'] 
+                }
+            }
+        },
+
+        //copy the jquery file from bower_components to htdocs/js/jquery
+        copy: {
+            jquery: {
+                files: [          
+                // includes files within path and its sub-directories
+                //expand -> It tells Grunt to "expand" the list of files that match the src pattern,
+                //filter -> filters only files, flattens -> Removes the directory structure from the source files.
+                {
+                    expand: true, 
+                    flatten: true,
+                    filter: 'isFile',
+                    src: ['bower_components/jquery/dist/*'], 
+                    dest: '../../htdocs/js/jquery'
+                },
+            
+                ],
+            },
+          },
+
+        obfuscator: {
+        options: {
+            banner: '// obfuscated with grunt-contrib-obfuscator.\n',
+            debugProtection: true,
+            debugProtectionInterval: true,
+            domainLock: ['grunt.selfmade.solutions']
+        },
+        task1: {
+            options: {
+                // options for each sub task
+            },
+            files: {        //destination : source
+                '../../htdocs/js/app.o.js': [         
+                    'dist/app.js',
+                ]
+            }
+        }
+    },
+          
+        //till now concat is over, continue on wat
         watch: {
             css: {
             // `/**/` matches any subdirectories inside css.  `*.css` matches all `.css` files in the css directory and its subdirectories.
@@ -52,7 +114,7 @@ module.exports = function(grunt){
                 '../css/**/*.css',
                 
             ],
-              tasks: ['concat:css'],
+              tasks: ['concat:css','cssmin'],
               options: {
                 spawn: false,
               },
@@ -63,12 +125,15 @@ module.exports = function(grunt){
                 '../js/**/*.js'       
                 
                 ],
-                tasks: ['concat:js'],
+                tasks: ['concat:js','uglify','obfuscate'],
                 options: {
                 spawn: false,
                 },
             },
-          },
+          
+        },
+
+
     });
 
     // Custom tasks
@@ -84,15 +149,14 @@ module.exports = function(grunt){
         console.log('Task 2 is running ...');
     })
 
-    // Load the plugin cssmin
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-
-    // Load the plugin that provides the "concat" task.
+    // Load the plugins that provide the tasks.
+    grunt.loadNpmTasks('grunt-contrib-obfuscator');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
-
-    // Load the plugin that provides the "watch" task.
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
-    grunt.registerTask('default',['task1','task2','concat','watch']);
+    grunt.registerTask('default',['copy','concat','cssmin','uglify','obfuscator','watch']);
 };
