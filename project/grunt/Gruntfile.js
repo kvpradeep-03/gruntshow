@@ -15,8 +15,9 @@ module.exports = function(grunt){
     // Project configuration.
     grunt.initConfig({
         
+        //concatenate files, concating css,js,scss files to project/dist folder
         concat: {
-        
+
             options: {
             //Defines the string or character that will be inserted between concatenated files.
             separator: '\n', 
@@ -44,20 +45,47 @@ module.exports = function(grunt){
                 dest: 'dist/app.js' 
             },
 
+            scss:{
+                src: [
+                    '../scss/**/*.scss',
+                ],
+
+                dest: 'dist/style.scss', 
+            },
+            
+
+        },
+
+        //compile the scss to css
+        sass: {
+            dist: {
+                options: {
+                    style: 'expanded'
+                },
+                files: {                    
+                    '../../htdocs/css/app.css': 'dist/style.scss',  //dst:src & app.css is the scss file
+                }
+            }
         },
 
         //minify the css,so it will be faster on loading frontend
+        //minify all the css, js, scss files in the dist folder and save it to htdocs respective folders
         cssmin: {
             options: {
                 mergeIntoShorthands: false,
                 roundingPrecision: -1
             },
-            target: {
-                files: {
-                '../../htdocs/css/style.css': ['dist/style.css']    //destination : source
-                }
-            }
-            },
+            css: {
+				files: {
+					'../../htdocs/css/style.css': ['dist/style.css'],         
+				}
+			},
+			scss: {
+				files: {
+					'../../htdocs/css/app.css': ['../../htdocs/css/app.css'],   //minify the scss(app.css) file and save it to htdocs/css/app.css
+				}
+			}
+        },
 
         //minify the js,so it will be faster on loading frontend
         uglify: {
@@ -85,7 +113,7 @@ module.exports = function(grunt){
             
                 ],
             },
-          },
+        },
 
         obfuscator: {
         options: {
@@ -105,33 +133,43 @@ module.exports = function(grunt){
             }
         }
     },
-          
-        //till now concat is over, continue on wat
-        watch: {
-            css: {
-            // `/**/` matches any subdirectories inside css.  `*.css` matches all `.css` files in the css directory and its subdirectories.
-              files: [
-                '../css/**/*.css',
-                
-            ],
-              tasks: ['concat:css','cssmin'],
-              options: {
-                spawn: false,
-              },
+        
+    //till now concat is over, continue on wat
+    watch: {
+        css: {
+        // `/**/` matches any subdirectories inside css.  `*.css` matches all `.css` files in the css directory and its subdirectories.
+            files: [
+            '../css/**/*.css',              
+        ],
+            tasks: ['concat:css','cssmin:css'],
+            options: {
+            spawn: false,
             },
-
-            js: {
-                files: [
-                '../js/**/*.js'       
-                
-                ],
-                tasks: ['concat:js','uglify','obfuscate'],
-                options: {
-                spawn: false,
-                },
-            },
-          
         },
+
+        scss: {
+            files: [
+            '../scss/**/*.scss',
+            ],
+            tasks: ['concat:css','sass','cssmin:scss'],
+            options: {
+            spawn: false,
+            },
+        },
+
+        js: {
+            files: [
+            '../js/**/*.js'       
+            
+            ],
+            tasks: ['concat:js','uglify','obfuscate'],
+            options: {
+            spawn: false,
+            },
+        },
+
+        
+    },
 
 
     });
@@ -156,7 +194,10 @@ module.exports = function(grunt){
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-sass');
 
     // Default task(s).
-    grunt.registerTask('default',['copy','concat','cssmin','uglify','obfuscator','watch']);
+    grunt.registerTask('css',['concat:css','cssmin','sass']);
+    grunt.registerTask('js',['concat:js','uglify','obfuscator']);
+    grunt.registerTask('default',['copy','concat','cssmin:css','sass','cssmin:scss','uglify','obfuscator','watch']);
 };

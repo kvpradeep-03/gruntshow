@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../scss/indev.scss"],"names":[],"mappings":";AAAA,CAAC,KAAK,CAAC,CAAC;AACR,IAAI,EAAE,CAAC,CAAC;AACR,QAAQ,KAAK,CAAC,CAAC,KAAK;AACpB,IAAI,CAAC;AACL,IAAI,CAAC,CAAC,CAAC;AACP,QAAQ,KAAK,CAAC,QAAQ;AACtB,IAAI,CAAC;AACL","file":"style.scss","sourcesContent":[".indev {\n    h1 {\n        color: green\n    }\n    p {\n        color:darkcyan\n    }\n}"]}
